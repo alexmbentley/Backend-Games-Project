@@ -18,9 +18,8 @@ exports.readReviewObject = (id) => {
     });
 };
 
-exports.readUsers = (id) => {
+exports.readUsers = () => {
   return db.query(`SELECT * FROM users;`).then((result) => {
-    console.log(result.rows);
     return result.rows;
   });
 };
