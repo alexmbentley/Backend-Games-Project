@@ -1,4 +1,8 @@
-const { readCategories, readReviewObject } = require('../models/games-model');
+const {
+  readCategories,
+  readReviewObject,
+  readUsers,
+} = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
   readCategories()
@@ -17,4 +21,10 @@ exports.getReviewObject = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getUsers = (req, res, next) => {
+  readUsers((users) => {
+    res.status(200).send({ users });
+  }).catch(next);
 };

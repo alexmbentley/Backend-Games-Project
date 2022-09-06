@@ -7,6 +7,18 @@ const app = require('../app');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+describe('Error for wrongly spelled endpoints', () => {
+  it('400: Returns error when given invalid path', () => {
+    const reviewId = 'chips';
+    return request(app)
+      .get(`/api/reviews/${reviewId}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`Bad request`);
+      });
+  });
+});
+
 describe('GET /api/categories', () => {
   it('200: Returns an array', () => {
     return request(app)
@@ -75,15 +87,6 @@ describe('GET /api/reviews/:review_id', () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe(`Review id doesn't exist`);
-      });
-  });
-  it('400: Returns error when given invalid path', () => {
-    const reviewId = 'chips';
-    return request(app)
-      .get(`/api/reviews/${reviewId}`)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe(`Bad request`);
       });
   });
 });
