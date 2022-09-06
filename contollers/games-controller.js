@@ -15,7 +15,6 @@ exports.getReviewObject = (req, res, next) => {
       res.status(200).send({ Review: reviewObj });
     })
     .catch((err) => {
-      console.log(err, '<< controller');
       next(err);
     });
 };

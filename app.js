@@ -13,12 +13,12 @@ app.get('/api/reviews/:review_id', getReviewObject);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
-    console.log(err, '<<< app');
     res.status(err.status).send({ msg: err.msg });
   } else {
     next(err);
   }
-
+});
+app.use((err, req, res, next) => {
   let errorPSQLCodes = ['22P02'];
   if (errorPSQLCodes.includes(err.code)) {
     res.status(400).send({ msg: 'Bad request' });

@@ -16,7 +16,4 @@ exports.readReviewObject = (id) => {
         return Promise.reject({ status: 404, msg: `Review id doesn't exist` });
       }
     });
-  // .catch((err) => {
-  //   return Promise.reject(err);
-  // });
 };

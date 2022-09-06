@@ -45,40 +45,10 @@ describe('GET /api/categories', () => {
 });
 
 describe('GET /api/reviews/:review_id', () => {
-  it('200: Returns an object', () => {
-    const REVIEW_ID = 3;
-    return request(app)
-      .get(`/api/reviews/${REVIEW_ID}`)
-      .expect(200)
-      .then(({ body }) => {
-        expect(body).toBeInstanceOf(Object);
-      });
-  });
-  it('200: Returns an object with specified keys and value types', () => {
-    const REVIEW_ID = 4;
-    return request(app)
-      .get(`/api/reviews/${REVIEW_ID}`)
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.Review).toEqual(
-          expect.objectContaining({
-            review_id: expect.any(Number),
-            title: expect.any(String),
-            review_body: expect.any(String),
-            designer: expect.any(String),
-            review_img_url: expect.any(String),
-            votes: expect.any(Number),
-            category: expect.any(String),
-            owner: expect.any(String),
-            created_at: expect.any(String),
-          })
-        );
-      });
-  });
   it('200: Returns correct object when passed with specified id', () => {
-    const REVIEW_ID = 5;
+    const reviewId = 5;
     return request(app)
-      .get(`/api/reviews/${REVIEW_ID}`)
+      .get(`/api/reviews/${reviewId}`)
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual({
@@ -98,15 +68,22 @@ describe('GET /api/reviews/:review_id', () => {
         });
       });
   });
-  it.only('404: Returns error when user inputs ids that do not exist', () => {
-    const REVIEW_ID = 999;
+  it('404: Returns error when user inputs ids that do not exist', () => {
+    const reviewId = 999;
     return request(app)
-      .get(`/api/reviews/${REVIEW_ID}`)
+      .get(`/api/reviews/${reviewId}`)
       .expect(404)
       .then(({ body }) => {
-        console.log(body, '<< body');
         expect(body.msg).toBe(`Review id doesn't exist`);
       });
   });
+  it('400: Returns error when given invalid path', () => {
+    const reviewId = 'chips';
+    return request(app)
+      .get(`/api/reviews/${reviewId}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`Bad request`);
+      });
+  });
 });
-// ADD WHEN NOT A NUMBER
