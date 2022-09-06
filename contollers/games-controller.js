@@ -2,6 +2,7 @@ const {
   readCategories,
   readReviewObject,
   readUsers,
+  increaseVotes,
 } = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
@@ -29,4 +30,17 @@ exports.getUsers = (req, res, next) => {
       res.status(200).send({ users });
     })
     .catch(next);
+};
+
+exports.addVotes = (req, res, next) => {
+  const id = req.params.review_id;
+  const voteObj = req.body;
+  const votes = voteObj.inc_votes;
+  increaseVotes(id, votes)
+    .then((votesAdded) => {
+      res.status(200).send({ Review: votesAdded });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

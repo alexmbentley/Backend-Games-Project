@@ -4,6 +4,7 @@ const {
   getCategories,
   getReviewObject,
   getUsers,
+  addVotes,
 } = require('./contollers/games-controller');
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.get('/api/categories', getCategories);
 app.get('/api/reviews/:review_id', getReviewObject);
+app.patch('/api/reviews/:review_id', addVotes);
 app.get('/api/users', getUsers);
 
 app.all('/*', (req, res, next) => {
@@ -25,7 +27,7 @@ app.use((err, req, res, next) => {
   }
 });
 app.use((err, req, res, next) => {
-  let errorPSQLCodes = ['22P02'];
+  let errorPSQLCodes = ['22P02', '23502'];
   if (errorPSQLCodes.includes(err.code)) {
     res.status(400).send({ msg: 'Bad request' });
   } else {
@@ -34,6 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err, '<< err');
   res.status(500).send({ msg: 'Internal error' });
 });
 
