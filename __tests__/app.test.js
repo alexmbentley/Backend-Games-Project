@@ -9,12 +9,11 @@ afterAll(() => db.end());
 
 describe('Error for wrongly spelled endpoints', () => {
   it('400: Returns error when given invalid path', () => {
-    const reviewId = 'chips';
     return request(app)
-      .get(`/api/reviews/${reviewId}`)
-      .expect(400)
+      .get(`/api/us3r`)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe(`Bad request`);
+        expect(body.msg).toBe(`Path not found`);
       });
   });
 });
@@ -87,6 +86,44 @@ describe('GET /api/reviews/:review_id', () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe(`Review id doesn't exist`);
+      });
+  });
+});
+
+describe('GET /api/users', () => {
+  it('200: Returns an array', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+      });
+  });
+  it('200: Returns an array with data', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users.length).not.toBe(0);
+      });
+  });
+  it('200: Returns an array of objects with specified keys and value types', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
       });
   });
 });

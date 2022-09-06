@@ -24,7 +24,9 @@ exports.getReviewObject = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  readUsers((users) => {
-    res.status(200).send({ users });
-  }).catch(next);
+  readUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch(next);
 };
