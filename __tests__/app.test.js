@@ -67,6 +67,7 @@ describe('GET /api/reviews/:review_id', () => {
             review_id: 5,
             title: 'Proident tempor et.',
             category: 'social deduction',
+            comment_count: 0,
             designer: 'Seymour Buttz',
             owner: 'mallionaire',
             review_body:
@@ -75,7 +76,6 @@ describe('GET /api/reviews/:review_id', () => {
               'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
             created_at: '2021-01-07T09:06:08.077Z',
             votes: 5,
-            comment_count: 0,
           },
         });
       });

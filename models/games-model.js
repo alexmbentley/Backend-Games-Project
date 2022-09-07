@@ -7,26 +7,19 @@ exports.readCategories = () => {
 };
 
 exports.readReviewObject = (id) => {
-  let votes = 0;
   return db
     .query(
-      `SELECT reviews.review_id, review_body, title, designer, review_img_url, reviews.votes, category, owner, reviews.created_at FROM reviews 
-    LEFT JOIN comments 
-    ON comments.review_id=reviews.review_id 
-    WHERE reviews.review_id=$1`,
-      [id]
+      `SELECT reviews.review_id,  title, designer, review_body, review_img_url, reviews.votes, category, owner, reviews.created_at, COUNT(comment_id) AS comment_count
+        FROM reviews 
+        LEFT JOIN comments on comments.review_id = reviews.review_id
+        GROUP BY reviews.review_id`
     )
-    .then(({ rows }) => {
-      if (rows.length > 0) {
-        for (num of rows) {
-          if (rows.length === 1) {
-            num.comment_count = 0;
-            return rows[0];
-          } else if (rows.length > 1) {
-            num.comment_count = rows.length;
-          }
-          return rows[0];
-        }
+    .then((data) => {
+      newData = data.rows;
+      let result = newData.find((item) => item.review_id == id);
+      if (result !== undefined) {
+        result.comment_count = parseInt(result.comment_count);
+        return result;
       } else {
         return Promise.reject({ status: 404, msg: `Review id doesn't exist` });
       }
