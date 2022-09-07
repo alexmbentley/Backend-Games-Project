@@ -9,7 +9,7 @@ exports.readCategories = () => {
 exports.readReviewObject = (id) => {
   return db
     .query(
-      `SELECT reviews.review_id,  title, designer, review_body, review_img_url, reviews.votes, category, owner, reviews.created_at, COUNT(comment_id) AS comment_count
+      `SELECT reviews.review_id,  title, designer, review_body, review_img_url, reviews.votes, category, owner, reviews.created_at, COUNT(comment_id)::INT AS comment_count
         FROM reviews 
         LEFT JOIN comments on comments.review_id = reviews.review_id
         GROUP BY reviews.review_id`
@@ -18,7 +18,6 @@ exports.readReviewObject = (id) => {
       newData = data.rows;
       let result = newData.find((item) => item.review_id == id);
       if (result !== undefined) {
-        result.comment_count = parseInt(result.comment_count);
         return result;
       } else {
         return Promise.reject({ status: 404, msg: `Review id doesn't exist` });
