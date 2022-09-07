@@ -56,7 +56,7 @@ describe('GET /api/categories', () => {
 });
 
 describe('GET /api/reviews/:review_id', () => {
-  it('200: Returns correct object when passed with specified id', () => {
+  it('200: Returns correct object when passed with specified id and comment_count where there are 0 comments', () => {
     const reviewId = 5;
     return request(app)
       .get(`/api/reviews/${reviewId}`)
@@ -67,6 +67,7 @@ describe('GET /api/reviews/:review_id', () => {
             review_id: 5,
             title: 'Proident tempor et.',
             category: 'social deduction',
+            comment_count: 0,
             designer: 'Seymour Buttz',
             owner: 'mallionaire',
             review_body:
@@ -75,6 +76,29 @@ describe('GET /api/reviews/:review_id', () => {
               'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
             created_at: '2021-01-07T09:06:08.077Z',
             votes: 5,
+          },
+        });
+      });
+  });
+  it('200: Returns correct object when passed with specified id, also has comment_count added', () => {
+    const reviewId = 2;
+    return request(app)
+      .get(`/api/reviews/${reviewId}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          Review: {
+            review_id: 2,
+            title: 'Jenga',
+            designer: 'Leslie Scott',
+            owner: 'philippaclaire9',
+            review_img_url:
+              'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+            review_body: 'Fiddly fun for all the family',
+            category: 'dexterity',
+            created_at: '2021-01-18T10:01:41.251Z',
+            votes: 5,
+            comment_count: 3,
           },
         });
       });
