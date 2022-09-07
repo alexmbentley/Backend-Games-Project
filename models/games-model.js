@@ -31,15 +31,6 @@ exports.readReviewObject = (id) => {
       }
     });
 };
-//     .query(`SELECT * FROM reviews WHERE review_id = $1;`, [id])
-//     .then(({ rows }) => {
-//       if (rows.length > 0) {
-//         return rows[0];
-//       } else {
-//         return Promise.reject({ status: 404, msg: `Review id doesn't exist` });
-//       }
-//     });
-// };
 
 exports.readUsers = () => {
   return db.query(`SELECT * FROM users;`).then((result) => {
