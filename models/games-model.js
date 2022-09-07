@@ -20,6 +20,7 @@ exports.readReviewObject = (id) => {
       if (rows.length > 0) {
         for (num of rows) {
           if (rows.length === 1) {
+            num.comment_count = 0;
             return rows[0];
           } else if (rows.length > 1) {
             num.comment_count = rows.length;
