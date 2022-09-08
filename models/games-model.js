@@ -87,7 +87,6 @@ exports.readComments = (reviewId) => {
   return db
     .query(`SELECT * FROM comments WHERE review_id = $1;`, inputId)
     .then((result) => {
-      console.log(result.rows);
       if (result.rows.length === 0) {
         return Promise.reject({ status: 404, msg: `review_id doesn't exist` });
       } else {
