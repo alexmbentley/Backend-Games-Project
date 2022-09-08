@@ -45,3 +45,37 @@ exports.increaseVotes = (id, votes) => {
       }
     });
 };
+
+exports.readReviews = (category) => {
+  const validCategory = [
+    'euro game',
+    'dexterity',
+    `social-deduction`,
+    `childrens-games`,
+    undefined,
+  ];
+
+  if (!validCategory.includes(category)) {
+    return Promise.reject({ status: 400, msg: 'bad request' });
+  }
+  category.replace('');
+  if (category === `childrens-games`) {
+    category = `children''s games`;
+  }
+  if (category === `social-deduction`) {
+    category = `social deduction`;
+  }
+
+  let queryStr = `SELECT reviews.review_id,  title, designer, review_body, review_img_url, reviews.votes, category, owner, reviews.created_at, COUNT(comment_id)::INT AS comment_count
+  FROM reviews 
+  LEFT JOIN comments on comments.review_id = reviews.review_id`;
+
+  if (category) {
+    queryStr += ` WHERE reviews.category = '${category}'`;
+  }
+  queryStr += ` GROUP BY reviews.review_id;`;
+
+  return db.query(queryStr).then((data) => {
+    return data.rows;
+  });
+};

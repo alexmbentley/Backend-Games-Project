@@ -3,6 +3,7 @@ const {
   readReviewObject,
   readUsers,
   increaseVotes,
+  readReviews,
 } = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
@@ -39,6 +40,17 @@ exports.addVotes = (req, res, next) => {
   increaseVotes(id, votes)
     .then((votesAdded) => {
       res.status(200).send({ Review: votesAdded });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getReviews = (req, res, next) => {
+  const { category } = req.query;
+  readReviews(category)
+    .then((reviews) => {
+      res.status(200).send({ reviews });
     })
     .catch((err) => {
       next(err);
