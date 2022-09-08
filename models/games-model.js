@@ -58,7 +58,7 @@ exports.readReviews = (category) => {
   if (!validCategory.includes(category)) {
     return Promise.reject({ status: 400, msg: 'bad request' });
   }
-  category.replace('');
+
   if (category === `childrens-games`) {
     category = `children''s games`;
   }

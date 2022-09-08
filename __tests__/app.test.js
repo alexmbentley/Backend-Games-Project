@@ -243,7 +243,7 @@ describe('GET /api/reviews', () => {
         ]);
       });
   });
-  it.only('200: Will return empty array if there is a valid catergory with no reviews', () => {
+  it('200: Will return empty array if there is a valid catergory with no reviews', () => {
     return request(app)
       .get(`/api/reviews?category=childrens-games`)
       .expect(200)
