@@ -192,3 +192,63 @@ describe('PATCH /api/reviews/:review_id', () => {
       });
   });
 });
+
+describe('GET /api/reviews', () => {
+  it('200: Returns an array of review objects with selected properties and value types', () => {
+    return request(app)
+      .get('/api/reviews')
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeInstanceOf(Array);
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              review_id: expect.any(Number),
+              title: expect.any(String),
+              designer: expect.any(String),
+              review_body: expect.any(String),
+              review_img_url: expect.any(String),
+              votes: expect.any(Number),
+              category: expect.any(String),
+              owner: expect.any(String),
+              created_at: expect.any(String),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+  it('200: Returns reviews based on category entered', () => {
+    return request(app)
+      .get(`/api/reviews?category=dexterity`)
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeInstanceOf(Array);
+        expect(reviews).toEqual([
+          {
+            review_id: 2,
+            title: 'Jenga',
+            designer: 'Leslie Scott',
+            review_body: 'Fiddly fun for all the family',
+            review_img_url:
+              'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+            votes: 5,
+            category: 'dexterity',
+            owner: 'philippaclaire9',
+            created_at: '2021-01-18T10:01:41.251Z',
+            comment_count: 3,
+          },
+        ]);
+      });
+  });
+  it('400: Will return specified error when given bad path', () => {
+    return request(app)
+      .get(`/api/reviews?category=NotACategory`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: 'bad request' });
+      });
+  });
+});
