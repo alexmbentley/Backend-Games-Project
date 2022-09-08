@@ -4,6 +4,7 @@ const {
   readUsers,
   increaseVotes,
   readReviews,
+  readComments,
 } = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
@@ -51,6 +52,18 @@ exports.getReviews = (req, res, next) => {
   readReviews(category)
     .then((reviews) => {
       res.status(200).send({ reviews });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getComments = (req, res, next) => {
+  const reviewId = req.params.review_id;
+  console.log(reviewId);
+  readComments(reviewId)
+    .then((comments) => {
+      res.status(200).send(comments);
     })
     .catch((err) => {
       next(err);
