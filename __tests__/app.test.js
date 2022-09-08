@@ -269,7 +269,6 @@ describe('GET /api/reviews/:review_id/comments', () => {
       .get(`/api/reviews/${reviewId}/comments`)
       .expect(200)
       .then(({ body }) => {
-        expect(body).toBeInstanceOf(Array);
         expect(body.length).toBe(3);
         expect(body).toEqual([
           {
