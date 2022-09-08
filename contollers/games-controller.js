@@ -60,7 +60,6 @@ exports.getReviews = (req, res, next) => {
 
 exports.getComments = (req, res, next) => {
   const reviewId = req.params.review_id;
-  console.log(reviewId);
   readComments(reviewId)
     .then((comments) => {
       res.status(200).send(comments);
