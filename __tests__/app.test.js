@@ -243,6 +243,15 @@ describe('GET /api/reviews', () => {
         ]);
       });
   });
+  it.only('200: Will return empty array if there is a valid catergory with no reviews', () => {
+    return request(app)
+      .get(`/api/reviews?category=childrens-games`)
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toEqual([]);
+      });
+  });
   it('400: Will return specified error when given bad path', () => {
     return request(app)
       .get(`/api/reviews?category=NotACategory`)

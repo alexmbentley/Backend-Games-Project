@@ -50,13 +50,20 @@ exports.readReviews = (category) => {
   const validCategory = [
     'euro game',
     'dexterity',
-    'social deduction',
-    "children's games",
+    `social-deduction`,
+    `childrens-games`,
     undefined,
   ];
 
   if (!validCategory.includes(category)) {
     return Promise.reject({ status: 400, msg: 'bad request' });
+  }
+  category.replace('');
+  if (category === `childrens-games`) {
+    category = `children''s games`;
+  }
+  if (category === `social-deduction`) {
+    category = `social deduction`;
   }
 
   let queryStr = `SELECT reviews.review_id,  title, designer, review_body, review_img_url, reviews.votes, category, owner, reviews.created_at, COUNT(comment_id)::INT AS comment_count
