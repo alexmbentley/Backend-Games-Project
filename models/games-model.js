@@ -107,3 +107,14 @@ exports.readComments = (reviewId) => {
       }
     });
 };
+
+exports.postComment = (id, comment) => {
+  return db
+    .query(
+      `INSERT INTO comments (review_id, author, body) VALUES ($1, $2, $3) RETURNING  *`,
+      [id, comment.username, comment.body]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};
