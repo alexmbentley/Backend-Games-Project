@@ -299,7 +299,7 @@ describe('GET /api/reviews/:review_id/comments', () => {
       });
   });
   it(`404: Returns error and message when review_id doesn't exist`, () => {
-    const reviewId = 9999;
+    const reviewId = 999;
     return request(app)
       .get(`/api/reviews/${reviewId}/comments`)
       .expect(404)
@@ -316,4 +316,19 @@ describe('GET /api/reviews/:review_id/comments', () => {
         expect(body.msg).toEqual(`Bad request`);
       });
   });
+  it('200: Returns message for review exists but has no comments', () => {
+    const reviewId = 6;
+    return request(app)
+      .get(`/api/reviews/${reviewId}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(`review_id exists but has no comments`);
+      });
+  });
 });
+
+// describe('POST /api/reviews/:review_id/comments', () => {
+//   it('201: Returns posted comment showing it was created', () => {
+
+//   })
+// })
