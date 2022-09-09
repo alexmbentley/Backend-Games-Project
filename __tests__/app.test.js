@@ -261,3 +261,74 @@ describe('GET /api/reviews', () => {
       });
   });
 });
+
+describe('GET /api/reviews/:review_id/comments', () => {
+  it('200: Returns array of comments for the given review id', () => {
+    const reviewId = 2;
+    return request(app)
+      .get(`/api/reviews/${reviewId}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.length).toBe(3);
+        expect(body).toEqual([
+          {
+            author: 'bainesface',
+            body: 'I loved this game too!',
+            comment_id: 1,
+            created_at: '2017-11-22T12:43:33.389Z',
+            review_id: 2,
+            votes: 16,
+          },
+          {
+            author: 'bainesface',
+            body: 'EPIC board game!',
+            comment_id: 4,
+            created_at: '2017-11-22T12:36:03.389Z',
+            review_id: 2,
+            votes: 16,
+          },
+          {
+            author: 'mallionaire',
+            body: 'Now this is a story all about how, board games turned my life upside down',
+            comment_id: 5,
+            created_at: '2021-01-18T10:24:05.410Z',
+            review_id: 2,
+            votes: 13,
+          },
+        ]);
+      });
+  });
+  it(`404: Returns error and message when review_id doesn't exist`, () => {
+    const reviewId = 999;
+    return request(app)
+      .get(`/api/reviews/${reviewId}/comments`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(`review_id doesn't exist`);
+      });
+  });
+  it(`400: Returns error and message when review_id is not a number`, () => {
+    const reviewId = 'NotANumber';
+    return request(app)
+      .get(`/api/reviews/${reviewId}/comments`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(`Bad request`);
+      });
+  });
+  it('200: Returns message for review exists but has no comments', () => {
+    const reviewId = 6;
+    return request(app)
+      .get(`/api/reviews/${reviewId}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(`review_id exists but has no comments`);
+      });
+  });
+});
+
+// describe('POST /api/reviews/:review_id/comments', () => {
+//   it('201: Returns posted comment showing it was created', () => {
+
+//   })
+// })

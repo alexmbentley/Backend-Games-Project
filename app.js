@@ -6,6 +6,7 @@ const {
   getReviewObject,
   getUsers,
   addVotes,
+  getComments,
 } = require('./contollers/games-controller');
 
 const app = express();
@@ -15,6 +16,7 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews', getReviews);
 app.get('/api/reviews/:review_id', getReviewObject);
 app.patch('/api/reviews/:review_id', addVotes);
+app.get('/api/reviews/:review_id/comments', getComments);
 app.get('/api/users', getUsers);
 
 app.all('/*', (req, res, next) => {

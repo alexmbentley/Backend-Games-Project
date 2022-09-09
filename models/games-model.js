@@ -79,3 +79,31 @@ exports.readReviews = (category) => {
     return data.rows;
   });
 };
+
+exports.readComments = (reviewId) => {
+  let inputId = [];
+  inputId.push(reviewId);
+  return db
+    .query(`SELECT * FROM comments WHERE review_id = $1;`, inputId)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return db
+          .query(`SELECT * FROM reviews WHERE review_id = $1`, [reviewId])
+          .then(({ rows }) => {
+            if (rows.length === 0) {
+              return Promise.reject({
+                status: 404,
+                msg: `review_id doesn't exist`,
+              });
+            } else {
+              return Promise.reject({
+                status: 200,
+                msg: `review_id exists but has no comments`,
+              });
+            }
+          });
+      } else {
+        return result.rows;
+      }
+    });
+};
