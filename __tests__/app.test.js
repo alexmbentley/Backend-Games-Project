@@ -260,6 +260,16 @@ describe('GET /api/reviews', () => {
         expect(body).toEqual({ msg: 'bad request' });
       });
   });
+  it('200: Returns an array of review objects sorted by date descending by default', () => {
+    return request(app)
+      .get('/api/reviews')
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        console.log(reviews);
+        expect(reviews).toBeSortedBy('date', { descending: true });
+      });
+  });
 });
 
 describe('GET /api/reviews/:review_id/comments', () => {
@@ -328,23 +338,6 @@ describe('GET /api/reviews/:review_id/comments', () => {
 });
 
 describe('POST /api/reviews/:review_id/comments', () => {
-  it('201: Returns posted comment showing it was created', () => {
-    const commentObj = { username: 'mallionaire', body: 'Great game' };
-    const id = 1;
-    return request(app)
-      .post(`/api/reviews/${id}/comments`)
-      .send(commentObj)
-      .expect(201)
-      .then(({ body }) => {
-        let returnObj = body.comment;
-        expect(returnObj).toHaveProperty('comment_id', expect.any(Number));
-        expect(returnObj).toHaveProperty('body', expect.any(String));
-        expect(returnObj).toHaveProperty('review_id', expect.any(Number));
-        expect(returnObj).toHaveProperty('author', expect.any(String));
-        expect(returnObj).toHaveProperty('votes', expect.any(Number));
-        expect(returnObj).toHaveProperty('created_at', expect.any(String));
-      });
-  });
   it('201: Returns the object with specific values', () => {
     const commentObj = {
       username: 'mallionaire',
