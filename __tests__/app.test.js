@@ -327,8 +327,82 @@ describe('GET /api/reviews/:review_id/comments', () => {
   });
 });
 
-// describe('POST /api/reviews/:review_id/comments', () => {
-//   it('201: Returns posted comment showing it was created', () => {
-
-//   })
-// })
+describe('POST /api/reviews/:review_id/comments', () => {
+  it('201: Returns posted comment showing it was created', () => {
+    const commentObj = { username: 'mallionaire', body: 'Great game' };
+    const id = 1;
+    return request(app)
+      .post(`/api/reviews/${id}/comments`)
+      .send(commentObj)
+      .expect(201)
+      .then(({ body }) => {
+        let returnObj = body.comment;
+        expect(returnObj).toHaveProperty('comment_id', expect.any(Number));
+        expect(returnObj).toHaveProperty('body', expect.any(String));
+        expect(returnObj).toHaveProperty('review_id', expect.any(Number));
+        expect(returnObj).toHaveProperty('author', expect.any(String));
+        expect(returnObj).toHaveProperty('votes', expect.any(Number));
+        expect(returnObj).toHaveProperty('created_at', expect.any(String));
+      });
+  });
+  it('201: Returns the object with specific values', () => {
+    const commentObj = {
+      username: 'mallionaire',
+      body: 'All I can say is wow.',
+    };
+    const id = 3;
+    return request(app)
+      .post(`/api/reviews/${id}/comments`)
+      .send(commentObj)
+      .expect(201)
+      .then(({ body }) => {
+        let returnObj = body.comment;
+        expect(returnObj.author).toBe('mallionaire');
+        expect(returnObj.body).toBe('All I can say is wow.');
+        expect(returnObj.votes).toBe(0);
+        expect(returnObj.review_id).toBe(3);
+      });
+  });
+  it('400: Returns error when object has wrong key', () => {
+    const commentObj = {
+      username: 'mallionaire',
+      wrongkey: 'All I can say is wow.',
+    };
+    const id = 3;
+    return request(app)
+      .post(`/api/reviews/${id}/comments`)
+      .send(commentObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  it('400: Returns error when given incorrect endpoint', () => {
+    const commentObj = {
+      username: 'mallionaire',
+      wrongkey: 'All I can say is wow.',
+    };
+    const id = 'a';
+    return request(app)
+      .post(`/api/reviews/${id}/comments`)
+      .send(commentObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  it('404: Returns error if username is incorrect', () => {
+    const commentObj = {
+      username: 'Not a username',
+      wrongkey: 'All I can say is wow.',
+    };
+    const id = 1;
+    return request(app)
+      .post(`/api/reviews/${id}/comments`)
+      .send(commentObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+});

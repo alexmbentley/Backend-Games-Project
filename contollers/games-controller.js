@@ -5,6 +5,7 @@ const {
   increaseVotes,
   readReviews,
   readComments,
+  postComment,
 } = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
@@ -63,6 +64,18 @@ exports.getComments = (req, res, next) => {
   readComments(reviewId)
     .then((comments) => {
       res.status(200).send(comments);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.addComment = (req, res, next) => {
+  const id = req.params.review_id;
+  const newComment = req.body;
+  postComment(id, newComment)
+    .then((addedComment) => {
+      res.status(201).send({ comment: addedComment });
     })
     .catch((err) => {
       next(err);
