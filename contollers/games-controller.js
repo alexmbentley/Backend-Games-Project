@@ -50,7 +50,9 @@ exports.addVotes = (req, res, next) => {
 
 exports.getReviews = (req, res, next) => {
   const { category } = req.query;
-  readReviews(category)
+  const { order } = req.query;
+  const { sort_by } = req.query;
+  readReviews(category, sort_by, order)
     .then((reviews) => {
       res.status(200).send({ reviews });
     })

@@ -46,7 +46,7 @@ exports.increaseVotes = (id, votes) => {
     });
 };
 
-exports.readReviews = (category) => {
+exports.readReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const validCategory = [
     'euro game',
     'dexterity',
@@ -54,6 +54,25 @@ exports.readReviews = (category) => {
     `childrens-games`,
     undefined,
   ];
+  const validOrders = ['asc', 'desc'];
+  const validColumns = [
+    'review_id',
+    'title',
+    'designer',
+    'review_body',
+    'review_img_url',
+    'votes',
+    'category',
+    'owner',
+    'created_at',
+  ];
+  if (!validColumns.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: 'bad request' });
+  }
+
+  if (!validOrders.includes(order)) {
+    return Promise.reject({ status: 400, msg: 'bad request' });
+  }
 
   if (!validCategory.includes(category)) {
     return Promise.reject({ status: 400, msg: 'bad request' });
@@ -73,8 +92,15 @@ exports.readReviews = (category) => {
   if (category) {
     queryStr += ` WHERE reviews.category = '${category}'`;
   }
-  queryStr += ` GROUP BY reviews.review_id;`;
 
+  queryStr += ` GROUP BY reviews.review_id`;
+
+  if (order === 'asc') {
+    queryStr += ` ORDER BY ${sort_by} ASC`;
+  } else {
+    queryStr += ` ORDER BY ${sort_by} DESC`;
+  }
+  console.log(order, '<<model order');
   return db.query(queryStr).then((data) => {
     return data.rows;
   });

@@ -266,8 +266,16 @@ describe('GET /api/reviews', () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        console.log(reviews);
-        expect(reviews).toBeSortedBy('date', { descending: true });
+        expect(reviews).toBeSortedBy('created_at', { descending: true });
+      });
+  });
+  it('200: Returns an array sorted by ascending order when queried', () => {
+    return request(app)
+      .get('/api/reviews?order=asc')
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy('created_at', { ascending: true });
       });
   });
 });
