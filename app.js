@@ -8,6 +8,7 @@ const {
   addVotes,
   getComments,
   addComment,
+  deleteCommentByID,
 } = require('./contollers/games-controller');
 
 const app = express();
@@ -21,6 +22,7 @@ app.patch('/api/reviews/:review_id', addVotes);
 app.get('/api/reviews/:review_id/comments', getComments);
 app.get('/api/users', getUsers);
 app.post('/api/reviews/:review_id/comments', addComment);
+app.delete('/api/comments/:comment_id', deleteCommentByID);
 
 app.all('/*', (req, res, next) => {
   res.status(404).send({ msg: 'Path not found' });

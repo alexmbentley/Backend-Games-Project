@@ -6,6 +6,7 @@ const {
   readReviews,
   readComments,
   postComment,
+  deleteCommentFromIDModel,
 } = require('../models/games-model');
 
 exports.getCategories = (req, res, next) => {
@@ -78,6 +79,17 @@ exports.addComment = (req, res, next) => {
   postComment(id, newComment)
     .then((addedComment) => {
       res.status(201).send({ comment: addedComment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteCommentByID = (req, res, next) => {
+  let commentID = req.params.comment_id;
+  return deleteCommentFromIDModel(commentID)
+    .then(() => {
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);

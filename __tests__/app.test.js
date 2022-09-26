@@ -407,3 +407,23 @@ describe('POST /api/reviews/:review_id/comments', () => {
       });
   });
 });
+
+describe('api delete comment by ID', () => {
+  test('returns 204 status and empty body', () => {
+    return request(app)
+      .delete('/api/comments/1')
+      .expect(204)
+      .then((res) => {
+        expect(res.body).toEqual({});
+      });
+  });
+  test("returns 404 status when the requested comment ID doesn't exist", () => {
+    return request(app).delete('/api/comments/10120102').expect(404);
+  });
+  test('returns 400 status when the requested comment ID is the wrong type (not a string)', () => {
+    return request(app).delete('/api/comments/asa').expect(400);
+  });
+  test('Returns a 400 status, if not given an object to attach', () => {
+    return request(app).post('/api/reviews/1/comments').expect(400);
+  });
+});

@@ -144,3 +144,21 @@ exports.postComment = (id, comment) => {
       return result.rows[0];
     });
 };
+
+exports.deleteCommentFromIDModel = (commentID) => {
+  return db
+    .query('SELECT * FROM comments WHERE comment_id=$1', [commentID])
+    .then((data) => {
+      data = data.rows;
+      if (data.length > 0) {
+        return db.query(`DELETE FROM comments WHERE comment_id=$1`, [
+          commentID,
+        ]);
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: 'Comment ID not found',
+        });
+      }
+    });
+};
