@@ -13,8 +13,7 @@
         }
       ]
     }
-  },
-  "GET /api/reviews": {
+  }, "GET /api/reviews": {
     "description": "serves an array of all reviews",
     "queries": ["category", "sort_by", "order"],
     "exampleResponse": {
@@ -29,6 +28,71 @@
           "votes": 5
         }
       ]
+    },"GET /api/reviews/:review_id": {
+    "description": "pulls a specific review based on ID",
+    "exampleResponse": {
+      "review": 
+      {
+        "title": "Yahtzee",
+        "designer": "Edwin S. Lowe",
+        "owner": "grumpy19",
+        "review_img_url":
+          "https://images.pexels.com/photos/33968/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "review_body":
+          "Often thought of as the ultimate roll-and-write game, You\"ll find it hard to overlook Yahtzee\"s appeal. Yahtzee is quick to teach and quick to play. Think of it as an essential 'palate-cleanser' game to have in your store cupboard for those times when chunkier games leave a bitter taste in players mouths.",
+        "category": "roll-and-write",
+        "created_at": "new Date(1600010360077)",
+        "votes": 18
+        }
+      }
     }
+  },"GET /api/reviews/:review_id/comments":{
+    "description": "Responds with specific review comments",
+    "exampleResponse" : { "comments": [
+      {
+        "author": "bainesface",
+        "body": "I loved this game too!",
+        "comment_id": 1,
+        "created_at": "2017-11-22T12:43:33.389Z",
+        "review_id": 2,
+        "votes": 16
+      },
+      {
+        "author": "bainesface",
+        "body": "EPIC board game!",
+        "comment_id": 4,
+        "created_at": "2017-11-22T12:36:03.389Z",
+        "review_id": 2,
+        "votes": 16
+      },
+      {
+        "author": "mallionaire",
+        "body": "Now this is a story all about how, board games turned my life upside down",
+        "comment_id": 5,
+        "created_at": "2021-01-18T10:24:05.410Z",
+        "review_id": 2,
+        "votes": 13
+      }
+    ]}
+  },"POST /api/reviews/:review_id/comments": {
+    "description": "posts and returns posted comment",
+    "exampleResponse": {
+      "comment": 
+        {
+          "username": "mallionaire",
+          "body": "All I can say is wow."
+        }
+    }
+  },"Patch /api/reviews/:review_id": {
+    "description":"Allows the user to patch the review with the given ID by increasing the votes by a given number, returns the updated object",
+    "exampleResponse":{"inc_votes": 3}
+  },
+  "GET /api/users": {
+    "description":"serves an array of all users",
+    "exampleResponse":{
+      "users":[{"username":"tickle122","name":"Tom Tickle","avatar_url":"https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"}]
+    }
+  },"DELETE /api/comments/:comment_id":{
+    "description":"Enables the user to delete the comment with specific comment ID (given in the URL)"
   }
 }
