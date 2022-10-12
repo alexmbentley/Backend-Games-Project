@@ -427,15 +427,3 @@ describe('api delete comment by ID', () => {
     return request(app).post('/api/reviews/1/comments').expect(400);
   });
 });
-
-describe('api delete comment by ID', () => {
-  test.only('returns 204 status and empty body', () => {
-    return request(app)
-      .delete('/api')
-      .expect(404)
-      .then((res) => {
-        console.log(res, '<<<res');
-        expect(res).toEqual({});
-      });
-  });
-});
