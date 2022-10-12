@@ -97,8 +97,9 @@ exports.deleteCommentByID = (req, res, next) => {
 };
 
 exports.getAPI = (req, res, next) => {
-  return fs.readFile(`${__dirname}/../endpoints.json`, 'utf-8').then((data) => {
+  return fs.readFile('./endpoints.json', 'utf-8').then((data) => {
     data = JSON.parse(data);
     res.status(200).send({ data });
+    console.log(data, '<< data');
   });
 };
