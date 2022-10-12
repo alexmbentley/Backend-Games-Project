@@ -9,6 +9,8 @@ const {
   deleteCommentFromIDModel,
 } = require('../models/games-model');
 
+const api = require('../endpoints.json');
+
 exports.getCategories = (req, res, next) => {
   readCategories()
     .then((categories) => {
@@ -97,9 +99,6 @@ exports.deleteCommentByID = (req, res, next) => {
 };
 
 exports.getAPI = (req, res, next) => {
-  return fs.readFile('./endpoints.json', 'utf-8').then((data) => {
-    data = JSON.parse(data);
-    res.status(200).send({ data });
-    console.log(data, '<< data');
-  });
+  console.log(api, '<<<<<<<<<api');
+  res.status(200).send(api);
 };

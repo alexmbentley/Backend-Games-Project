@@ -409,7 +409,7 @@ describe('POST /api/reviews/:review_id/comments', () => {
 });
 
 describe('api delete comment by ID', () => {
-  test('returns 204 status and empty body', () => {
+  it('returns 204 status and empty body', () => {
     return request(app)
       .delete('/api/comments/1')
       .expect(204)
@@ -417,13 +417,25 @@ describe('api delete comment by ID', () => {
         expect(res.body).toEqual({});
       });
   });
-  test("returns 404 status when the requested comment ID doesn't exist", () => {
+  it("returns 404 status when the requested comment ID doesn't exist", () => {
     return request(app).delete('/api/comments/10120102').expect(404);
   });
-  test('returns 400 status when the requested comment ID is the wrong type (not a string)', () => {
+  it('returns 400 status when the requested comment ID is the wrong type (not a string)', () => {
     return request(app).delete('/api/comments/asa').expect(400);
   });
-  test('Returns a 400 status, if not given an object to attach', () => {
+  it('Returns a 400 status, if not given an object to attach', () => {
     return request(app).post('/api/reviews/1/comments').expect(400);
+  });
+});
+
+describe('api delete comment by ID', () => {
+  test.only('returns 204 status and empty body', () => {
+    return request(app)
+      .delete('/api')
+      .expect(404)
+      .then((res) => {
+        console.log(res, '<<<res');
+        expect(res).toEqual({});
+      });
   });
 });
